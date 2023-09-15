@@ -1,6 +1,8 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-char** init();
+char** initMap();
+int* initCars();
+void refresh();
 
 #endif

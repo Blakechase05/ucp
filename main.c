@@ -3,18 +3,18 @@
 
 #include "main.h"
 
-char** init(int rows, int cols) {
+
+char** initMap(int rows, int cols) {
   int i, j = 0;
 
   /* Make a double pointer that will be our 2D Arrray*/
-  char **map;
+  char** map;
 
   map = (char**)malloc(cols * sizeof(char*));
 
   for(i = 0; i < cols; i++) {
     map[i] = (char*)malloc(rows * sizeof(char));
   }
-
 
   for (i = 0; i < cols; i++) {
     for (j = 0; j < rows; j++) {
@@ -39,16 +39,37 @@ char** init(int rows, int cols) {
   map[1][1] = 'P';
   map[cols-2][rows-2] = 'G';
 
-  system("cls");
-
   for (i = 0; i < cols; i++) {
     for (j = 0; j < rows; j++) {
       printf(" %c", map[i][j]);
     }
+
     printf("\n");
   }
 
   return map;
+}
+
+int* initCars(int rows, int cols) {
+  int i = 0;
+
+  int* cars;
+  
+  cars = (int*)malloc(cols * sizeof(int));
+
+  for(i = 0; i < 15; i++) {
+    cars[i] = 1;
+  }
+
+  int n = sizeof(cars);
+
+  printf("%d", n);
+
+  return cars;
+}
+
+void refresh() {
+  system("cls");
 }
 
 int main(int argc, char* argv[]) {
@@ -73,13 +94,15 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  char** m = init(rows, cols);
+  /* char** map = initMap(rows, cols); */
+  int* cars = initCars(rows, cols);
 
-  for (i = 0; i < cols; i++) {
-    free(m[i]);
-  }
+  /* for (i = 0; i < cols; i++) {
+    free(map[i]);
+  } */
   
-  free(m);
+  /* free(map); */
+  free(cars);
 
   return 0;
 }
