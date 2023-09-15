@@ -1,38 +1,28 @@
 #include <stdio.h>
-#include <stdlib.h>
 
-int main(int argc, char* argv[]) {
-  int i, j = 0;
+int main() {
+    // Define the dimensions of the 2D array
+    int rows = 3;
+    int cols = 4;
 
-  int rows = atoi(argv[1]);
-  int cols = atoi(argv[2]);
-  
-  int **map;
+    // Declare and initialize a 2D array of chars
+    char charArray[rows][cols];
 
-  map = (int **)malloc(cols * sizeof(int *));
-  
-  for(i = 0; i < cols; i++) {
-    map[i] = (int*)malloc(rows * sizeof(int));
-  }
-
-  for (i = 0; i < cols; i++) {
-    for (j = 0; j < rows; j++) {
-      map[i][j] = 0;
+    // Initialize the elements of the array
+    // For example, you can use nested loops to assign values
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            charArray[i][j] = 'A';
+        }
     }
-  }
 
-  for (i = 0; i < cols; i++) {
-    for (j = 0; j < rows; j++) {
-      printf(" %d", map[i][j]);
+    // Print the elements of the array
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%c ", charArray[i][j]);
+        }
+        printf("\n");
     }
-    printf("\n");
-  }
 
-  for (i = 0; i < cols; i++) {
-    free(map[i]);
-  }
-  
-  free(map);
-
-  return 0;
-} 
+    return 0;
+}
