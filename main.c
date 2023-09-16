@@ -73,36 +73,30 @@ void refresh() {
 }
 
 int main(int argc, char* argv[]) {
-  int i, j = 0;
+  int i = 0;
 
   /* Input rows and coloums from the ./ command */
   int rows = atoi(argv[1]) + 2;
   int cols = atoi(argv[2]) + 2;
 
-  if(cols % 2 == 0) {
-    printf("Even number of columns, cya l8r allig8r");
-    return 1; 
+  int* cars;
+
+
+  cars = (int*)malloc(cols * sizeof(int));
+
+
+  for(i = 0; i < cols; i++) {
+    cars[i] = 1;
   }
 
-  if(rows - 2 < 3) {
-    printf("The number of rows can't be less than 3, exiting program");
-    return 1;
+  int size = sizeof(cars) / sizeof(cars[0]);
+  printf("%d\n", size);
+
+  for(i = 0; i < size; i++) {
+    printf("%d\n", cars[i]);
   }
 
-  if(cols - 2 < 5) {
-    printf("The number of columns can't be less than 5, exiting program");
-    return 1;
-  }
-
-  /* char** map = initMap(rows, cols); */
-  int* cars = initCars(rows, cols);
-
-  /* for (i = 0; i < cols; i++) {
-    free(map[i]);
-  } */
-  
-  /* free(map); */
   free(cars);
 
   return 0;
-}
+} 
