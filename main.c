@@ -3,6 +3,7 @@
 
 #include "main.h"
 #include "random.h"
+#include "newSleep.h"
 
 char** initMap(int rows, int cols, int* player, int* cars, char* carState) {
   int i, j = 0;
@@ -81,12 +82,33 @@ int* initPlayer() {
   return player;
 }
 
-void refresh() {
-  system("cls");
+void update(int rows, int cols, char** map) {
+  int i, j = 0;
+  
+  for (i = 0; i < cols; i++) {
+    for (j = 0; j < rows; j++) {
+      printf("%c", map[i][j]);
+    }
+    printf("\n");
+  }
+}
+
+void input(int rows, int cols, char** map) {
+  char input;
+
+  input = getchar();
+
+  if(input == 'w') {
+    update(rows, cols, map);
+  } else {
+    printf("Wrong input");
+  }
+
 }
 
 int main(int argc, char* argv[]) {
   int i = 0, j = 0;
+  int True = 1;
 
   /* Input rows and coloums from the ./ command */
   int rows = atoi(argv[2]) + 2;
@@ -99,30 +121,25 @@ int main(int argc, char* argv[]) {
 
   if(cols % 2 == 0) {
     printf("Even number of columns, cya l8r allig8r");
-    return 1;
+    return 0;
   }
 
   if(rows - 2 < 3) {
     printf("The number of rows can't be less than 3, exiting program");
-    return 1;
+    return 0;
   }
 
   if(cols - 2 < 5) {
     printf("The number of columns can't be less than 5, exiting program");
-    return 1;
+    return 0;
   }
 
-  for (i = 0; i < cols; i++) {
-    for (j = 0; j < rows; j++) {
-      printf("%c", map[i][j]);
-    }
-    printf("\n");
-  }
+  input(rows, cols, map);
 
   for (i = 0; i < cols; i++) {
     free(map[i]);
   }
-  
+
   free(player);
   free(cars);
   free(carState);

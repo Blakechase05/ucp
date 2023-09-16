@@ -3,8 +3,7 @@
 #include "random.h"
 
 /*call this function just ONCE at the beginning of your program before using the random number generator */
-void initRandom()
-{
+void initRandom() {
     srand(time(NULL));
 }
 
@@ -12,12 +11,10 @@ void initRandom()
    If the low is larger than the high, it will return -1 instead.
    In theory, it still works with negative *low* and *high* (as long as low is not larger than high).
    Please ensure you call initRandom function once before starting using this function. */
-int randomUCP(int low, int high)
-{
+int randomUCP(int low, int high) {
     int number = -1;
 
-    if(low <= high)
-    {
+    if(low <= high) {
         number = (rand() % (high-low+1)) + low;
     }
 
