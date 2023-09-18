@@ -5,6 +5,9 @@
 #include "random.h"
 #include "newSleep.h"
 
+#define FALSE 0
+#define TRUE !FALSE
+
 char** initMap(int rows, int cols, int* player, int* cars, char* carState) {
   int i, j = 0;
 
@@ -45,6 +48,13 @@ char** initMap(int rows, int cols, int* player, int* cars, char* carState) {
   map[player[0]][player[1]] = 'P';
   map[cols-2][rows-2] = 'G';
 
+  for (i = 0; i < cols; i++) {
+    for (j = 0; j < rows; j++) {
+      printf("%c", map[i][j]);
+    }
+    printf("\n");
+  }
+
   return map;
 }
 
@@ -82,28 +92,44 @@ int* initPlayer() {
   return player;
 }
 
-void update(int rows, int cols, char** map) {
+int* updatePlayer(int rows, int cols, int* player, char** map) {
+  char input;
+
+  input = getchar();
+
+  if(input == 'w') {
+    player[0] = player[0] - 1;
+  } else if (input == 's') {
+    player[0] = player[0] + 1;
+  } else if (input == 'd') {
+    player[1] = player[1] + 1;
+  } else if (input == 'a') {
+    player[1] = player[1] - 1;
+  }
+  return player;
+}
+
+void updateMap(int rows, int cols, int* player, char** map) {
   int i, j = 0;
-  
+
+  if(player[0] % 2 == 0) {
+    map[player[0]][player[1]] = '.';
+  }
+
+  if(player[0] % 2 == 1) {
+    map[player[0]][player[1]] = ' ';
+  }
+
+  updatePlayer(rows, cols, player, map);
+
+  map[player[0]][player[1]] = 'P';
+
   for (i = 0; i < cols; i++) {
     for (j = 0; j < rows; j++) {
       printf("%c", map[i][j]);
     }
     printf("\n");
   }
-}
-
-void input(int rows, int cols, char** map) {
-  char input;
-
-  input = getchar();
-
-  if(input == 'w') {
-    update(rows, cols, map);
-  } else {
-    printf("Wrong input");
-  }
-
 }
 
 int main(int argc, char* argv[]) {
@@ -134,7 +160,11 @@ int main(int argc, char* argv[]) {
     return 0;
   }
 
-  input(rows, cols, map);
+  while(TRUE) {
+    updateMap(rows, cols, player, map);
+  }
+
+  updatePlayer(rows, cols, player, map);
 
   for (i = 0; i < cols; i++) {
     free(map[i]);

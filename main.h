@@ -5,7 +5,7 @@ char** initMap(int rows, int cols, int* player, int* cars, char* carState);
 int* initCars(int rows, int cols);
 char* initCarState();
 int* initPlayer();
-void input(int rows, int cols, char** map);
-void update(int rows, int cols, char** map);
+int* updatePlayer(int rows, int cols, int* player, char** map);
+void updateMap(int rows, int cols, int* player, char** map);
 
 #endif
