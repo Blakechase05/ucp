@@ -14,7 +14,7 @@ char** initMap(int rows, int cols, int* player, int* cars, char* carState) {
   /* Make a double pointer that will be our 2D Arrray*/
   char** map = (char**)malloc(cols * sizeof(char*));
 
-  for(i = 0; i < cols; i++) {
+  for (i = 0; i < cols; i++) {
     map[i] = (char*)malloc(rows * sizeof(char));
   }
 
@@ -31,7 +31,7 @@ char** initMap(int rows, int cols, int* player, int* cars, char* carState) {
   /* Place cars */
   for(i = 0; i < cols - 2; i++) {
     if(i % 2 == 0) {
-      map[i][cars[i]] = carState[randomUCP(0, 1)];
+      map[i][cars[i]] = carState[i];
     }
   }
 
@@ -45,7 +45,10 @@ char** initMap(int rows, int cols, int* player, int* cars, char* carState) {
     map[i][rows-1] = '*';
   }
 
+  /* Place Player */
   map[player[0]][player[1]] = 'P';
+  
+  /* Place Goal */
   map[cols-2][rows-2] = 'G';
 
   for (i = 0; i < cols; i++) {
@@ -72,12 +75,23 @@ int* initCars(int rows, int cols) {
   return cars;
 }
 
-char* initCarState() {
-  char* carState = (char*)malloc(2 * sizeof(char));
-  carState[0] = '<';
-  carState[1] = '>';
+char* initCarState(int cols) {
+  int i = 0;
+  
+  char* state = (char*)malloc(2 * sizeof(char));
+  char* carStates = (char*)malloc(cols * sizeof(char));
+  
+  state[0] = '<';
+  state[1] = '>';
 
-  return carState;
+  /* Place cars */
+  for(i = 0; i < cols - 2; i++) {
+    if(i % 2 == 0) {
+      carStates[i] = state[randomUCP(0, 1)];
+    }
+  }
+
+  return carStates;
 }
 
 int* initPlayer() {
@@ -98,18 +112,26 @@ int* updatePlayer(int rows, int cols, int* player, char** map) {
   input = getchar();
 
   if(input == 'w') {
-    player[0] = player[0] - 1;
+    if(player[0] != 1) {
+      player[0] = player[0] - 1;
+    }
   } else if (input == 's') {
-    player[0] = player[0] + 1;
-  } else if (input == 'd') {
-    player[1] = player[1] + 1;
+    if(player[0] != cols - 2) {
+      player[0] = player[0] + 1;
+    }
   } else if (input == 'a') {
-    player[1] = player[1] - 1;
+    if(player[1] != 1) {
+      player[1] = player[1] - 1;
+    }
+  } else if (input == 'd') {
+    if(player[1] != rows - 2) {
+      player[1] = player[1] + 1;
+    }
   }
   return player;
 }
 
-void updateMap(int rows, int cols, int* player, char** map) {
+void updateMap(int rows, int cols, int* player, int* cars, char* carState, char** map) {
   int i, j = 0;
 
   if(player[0] % 2 == 0) {
@@ -121,8 +143,15 @@ void updateMap(int rows, int cols, int* player, char** map) {
   }
 
   updatePlayer(rows, cols, player, map);
-
   map[player[0]][player[1]] = 'P';
+
+  for(i = 0; i < cols - 2; i++) {
+    if(carState[i] == '<') {
+      printf("Hooray");
+    } else if (carState[i] == '>') {
+      printf("Yippie");
+    }
+  }
 
   for (i = 0; i < cols; i++) {
     for (j = 0; j < rows; j++) {
@@ -142,29 +171,30 @@ int main(int argc, char* argv[]) {
 
   int* player = initPlayer();
   int* cars = initCars(rows, cols);
-  char* carState = initCarState();
+  char* carState = initCarState(cols);
   char** map = initMap(rows, cols, player, cars, carState);
 
   if(cols % 2 == 0) {
     printf("Even number of columns, cya l8r allig8r");
     return 0;
-  }
-
-  if(rows - 2 < 3) {
+  } else if(rows - 2 < 3) {
     printf("The number of rows can't be less than 3, exiting program");
     return 0;
-  }
-
-  if(cols - 2 < 5) {
+  } else if(cols - 2 < 5) {
     printf("The number of columns can't be less than 5, exiting program");
     return 0;
   }
 
   while(TRUE) {
-    updateMap(rows, cols, player, map);
-  }
+    updateMap(rows, cols, player, cars, carState, map);
 
-  updatePlayer(rows, cols, player, map);
+    if(player[1] == rows - 2) {
+      if (player[0] == cols - 2) {
+        printf("Winny winny chicky dinner");
+        return 0;
+      }
+    }
+  }
 
   for (i = 0; i < cols; i++) {
     free(map[i]);
