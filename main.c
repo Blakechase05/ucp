@@ -22,19 +22,21 @@ char** initMap(int rows, int cols, int* player, int* cars, char* carState) {
     for (j = 0; j < rows; j++) {
       if(i % 2 == 0) {
         map[i][j] = '.';
-      } else {
-        map[i][j] = ' ';
       }
     }
   }
 
-  /* Place cars */
   for(i = 0; i < cols - 2; i++) {
-    if(i % 2 == 0) {
       map[i][cars[i]] = carState[i];
-    }
   }
 
+  for (i = 0; i < cols; i++) {
+    for (j = 0; j < rows; j++) {
+      if(i % 2 == 1) {
+        map[i][j] = ' ';
+      }
+    }
+  }
   for (i = 0; i < rows; i++) {
     map[0][i] = '*';
     map[cols-1][i] = '*';
@@ -44,6 +46,9 @@ char** initMap(int rows, int cols, int* player, int* cars, char* carState) {
     map[i][0] = '*';
     map[i][rows-1] = '*';
   }
+  /* Place cars */
+
+
 
   /* Place Player */
   map[player[0]][player[1]] = 'P';
@@ -67,9 +72,7 @@ int* initCars(int rows, int cols) {
   int* cars = (int*)malloc(cols * sizeof(int));
 
   for(i = 0; i < cols - 2; i++) {
-    if(i % 2 == 0) {
-      cars[i] = randomUCP(1, rows - 2);
-    }
+    cars[i] = randomUCP(1, rows - 2);
   }
 
   return cars;
@@ -85,10 +88,8 @@ char* initCarState(int cols) {
   state[1] = '>';
 
   /* Place cars */
-  for(i = 0; i < cols - 2; i++) {
-    if(i % 2 == 0) {
+  for(i = 0; i < cols; i++) {
       carStates[i] = state[randomUCP(0, 1)];
-    }
   }
 
   return carStates;
@@ -131,35 +132,63 @@ int* updatePlayer(int rows, int cols, int* player, char** map) {
   return player;
 }
 
-void updateMap(int rows, int cols, int* player, int* cars, char* carState, char** map) {
+int* updateCars(int rows, int cols, int* cars, char* carState, char** map) {
+  int i = 0;
+  
+  if(carState[2] == '<') {
+    map[2][cars[2]] = '.';
+    cars[2] = cars[2] - 1;
+  } else if (carState[2] == '>') {
+    map[2][cars[2]] = '.';
+    cars[2] = cars[2] + 1;
+  }
+
+  return cars;
+}
+
+char** updateMap(int rows, int cols, int* player, int* cars, char* carState, char** map) {
   int i, j = 0;
 
   if(player[0] % 2 == 0) {
     map[player[0]][player[1]] = '.';
   }
-
   if(player[0] % 2 == 1) {
     map[player[0]][player[1]] = ' ';
   }
 
   updatePlayer(rows, cols, player, map);
-  map[player[0]][player[1]] = 'P';
+  updateCars(rows, cols, cars, carState, map);
 
-  system("cls");
+  for(i = 0; i < cols - 2; i++) {
+    map[i][cars[i]] = carState[i];
+  }
 
   for (i = 0; i < cols; i++) {
     for (j = 0; j < rows; j++) {
-      printf("%c", map[i][j]);
+      if(i % 2 == 1) {
+        map[i][j] = ' ';
+      }
     }
-    printf("\n");
   }
+  for (i = 0; i < rows; i++) {
+    map[0][i] = '*';
+    map[cols-1][i] = '*';
+  }
+
+  for (i = 0; i < cols; i++) {
+    map[i][0] = '*';
+    map[i][rows-1] = '*';
+  }
+
+  map[player[0]][player[1]] = 'P';
+
+  return map;
 }
 
 int main(int argc, char* argv[]) {
   int i = 0, j = 0;
-  int True = 1;
-
-  /* Input rows and coloums from the ./ command */
+ 
+   /* Input rows and coloums from the ./ command */
   int rows = atoi(argv[2]) + 2;
   int cols = atoi(argv[1]) + 2;
 
@@ -194,6 +223,13 @@ int main(int argc, char* argv[]) {
         printf("You lose!");
         return 0;
       }
+    }
+
+    for (i = 0; i < cols; i++) {
+      for (j = 0; j < rows; j++) {
+        printf("%c", map[i][j]);
+      }
+      printf("\n");
     }
   }
 
