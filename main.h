@@ -3,9 +3,9 @@
 
 char** initMap(int rows, int cols, int* player, int* cars, char* carState);
 int* initCars(int rows, int cols);
-char* initCarState();
+char* initCarState(int cols);
 int* initPlayer();
 int* updatePlayer(int rows, int cols, int* player, char** map);
-void updateMap(int rows, int cols, int* player, char** map);
+void updateMap(int rows, int cols, int* player, int* cars, char* carState, char** map);
 
 #endif

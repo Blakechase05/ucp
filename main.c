@@ -144,21 +144,6 @@ void updateMap(int rows, int cols, int* player, int* cars, char* carState, char*
 
   updatePlayer(rows, cols, player, map);
   map[player[0]][player[1]] = 'P';
-
-  for(i = 0; i < cols - 2; i++) {
-    if(carState[i] == '<') {
-      printf("Hooray");
-    } else if (carState[i] == '>') {
-      printf("Yippie");
-    }
-  }
-
-  for (i = 0; i < cols; i++) {
-    for (j = 0; j < rows; j++) {
-      printf("%c", map[i][j]);
-    }
-    printf("\n");
-  }
 }
 
 int main(int argc, char* argv[]) {
@@ -188,11 +173,18 @@ int main(int argc, char* argv[]) {
   while(TRUE) {
     updateMap(rows, cols, player, cars, carState, map);
 
-    if(player[1] == rows - 2) {
-      if (player[0] == cols - 2) {
-        printf("Winny winny chicky dinner");
-        return 0;
+    for (i = 0; i < cols; i++) {
+      for (j = 0; j < rows; j++) {
+        printf("%c", map[i][j]);
       }
+      printf("\n");
+    }
+  }
+
+  if(player[1] == rows - 2) {
+    if (player[0] == cols - 2) {
+      printf("Winny winny chicky dinner");
+      return 0;
     }
   }
 
