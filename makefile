@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -ansi -pedantic
+CFLAGS = -Wall -ansi -pedantic -g
 OBJ = main.o init.o update.o random.o newSleep.o terminal.o
 EXEC = box
 
