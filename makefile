@@ -1,13 +1,19 @@
 CC = gcc
 CFLAGS = -Wall -ansi -pedantic
-OBJ = main.o random.o newSleep.o terminal.o
+OBJ = main.o init.o update.o random.o newSleep.o terminal.o
 EXEC = box
 
 $(EXEC): $(OBJ)
 	$(CC) $(OBJ) -o $(EXEC)
 
-main.o: main.c random.h
+main.o: main.c init.h update.h random.h newSleep.h terminal.h
 	$(CC) $(FLAGS) main.c -c
+
+init.o: init.c init.h
+	$(CC) $(CFLAGS) init.c -c
+
+update.o: update.c update.h
+	$(CC) $(CFLAGS) update.c -c
 
 random.o: random.c random.h
 	$(CC) $(CFLAGS) random.c -c
