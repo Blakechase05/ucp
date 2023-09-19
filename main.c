@@ -14,8 +14,16 @@ int main(int argc, char* argv[]) {
   int i = 0, j = 0;
 
    /* Input rows and coloums from the ./ command */
-  int rows = atoi(argv[2]) + 2;
-  int cols = atoi(argv[1]) + 2;
+  int rows; 
+  int cols; 
+
+  if (argc != 3) {
+    printf("Usage: %s <cols> <rows>\n", argv[0]);
+    return 1;
+  }
+
+  rows= atoi(argv[2]) + 2;
+  cols = atoi(argv[1]) + 2;
 
   /* Run all the init functions */
   int* player = initPlayer();
