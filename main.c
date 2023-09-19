@@ -4,6 +4,7 @@
 #include "main.h"
 #include "random.h"
 #include "newSleep.h"
+#include "terminal.h"
 
 #define FALSE 0
 #define TRUE !FALSE
@@ -46,9 +47,6 @@ char** initMap(int rows, int cols, int* player, int* cars, char* carState) {
     map[i][0] = '*';
     map[i][rows-1] = '*';
   }
-  /* Place cars */
-
-
 
   /* Place Player */
   map[player[0]][player[1]] = 'P';
@@ -110,7 +108,9 @@ int* initPlayer() {
 int* updatePlayer(int rows, int cols, int* player, char** map) {
   char input;
 
-  input = getchar();
+  disableBuffer();
+  scanf(" %c", &input);
+  enableBuffer();
 
   if(input == 'w') {
     if(player[0] != 1) {
@@ -139,6 +139,7 @@ int* updateCars(int rows, int cols, int* cars, char* carState, char** map) {
     if(carState[i] == '<') {
       if(cars[i] == 1) {
         carState[i] = '>';
+        cars[i] = cars[i] + 1;
       }
       if(cars[i] != 1) {
         map[i][cars[i]] = '.';
@@ -147,6 +148,7 @@ int* updateCars(int rows, int cols, int* cars, char* carState, char** map) {
     } else if (carState[i] == '>') {
       if(cars[i] == rows - 2) {
         carState[i] = '<';
+        cars[i] = cars[i] - 1;
       }
       if(cars[i] != rows - 2) {
         map[i][cars[i]] = '.';
@@ -158,7 +160,7 @@ int* updateCars(int rows, int cols, int* cars, char* carState, char** map) {
   return cars;
 }
 
-int updateMap(int rows, int cols, int* player, int* cars, char* carState, char** map, int counter) {
+char** updateMap(int rows, int cols, int* player, int* cars, char* carState, char** map) {
   int i, j = 0;
 
   if(player[0] % 2 == 0) {
@@ -168,8 +170,8 @@ int updateMap(int rows, int cols, int* player, int* cars, char* carState, char**
     map[player[0]][player[1]] = ' ';
   }
 
-  updatePlayer(rows, cols, player, map);
   updateCars(rows, cols, cars, carState, map);
+  updatePlayer(rows, cols, player, map);
 
   for(i = 0; i < cols - 2; i++) {
     map[i][cars[i]] = carState[i];
@@ -195,6 +197,7 @@ int updateMap(int rows, int cols, int* player, int* cars, char* carState, char**
   }
 
   map[player[0]][player[1]] = 'P';
+  map[cols-2][rows-2] = 'G';
 
   for (i = 0; i < cols; i++) {
     for (j = 0; j < rows; j++) {
@@ -202,13 +205,17 @@ int updateMap(int rows, int cols, int* player, int* cars, char* carState, char**
     }
     printf("\n");
   }
+  
+  printf("Press w to move up\n");
+  printf("Press a to move left\n");
+  printf("Press s to move down\n");
+  printf("Press d to move right\n");
 
-  return counter;
+  return map;
 }
 
 int main(int argc, char* argv[]) {
   int i = 0, j = 0;
-  int counter = 0;
 
    /* Input rows and coloums from the ./ command */
   int rows = atoi(argv[2]) + 2;
@@ -231,7 +238,7 @@ int main(int argc, char* argv[]) {
   }
 
   while(TRUE) {
-    updateMap(rows, cols, player, cars, carState, map, counter);
+    updateMap(rows, cols, player, cars, carState, map);
 
     if (player[1] == rows - 2) {
       if (player[0] == cols - 2) {
@@ -246,6 +253,8 @@ int main(int argc, char* argv[]) {
         return 0;
       }
     }
+
+    newSleep(0.25);
   }
 
   for (i = 0; i < cols; i++) {

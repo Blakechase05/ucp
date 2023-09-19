@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -ansi -pedantic
-OBJ = main.o random.o newSleep.o
+OBJ = main.o random.o newSleep.o terminal.o
 EXEC = box
 
 $(EXEC): $(OBJ)
@@ -14,6 +14,9 @@ random.o: random.c random.h
 
 newSleep.o: newSleep.c newSleep.h
 	$(CC) $(CFLAGS) newSleep.c -c
+
+terminal.o: terminal.c terminal.h
+	$(CC) $(CFLAGS) terminal.c -c
 
 clean:
 	rm $(EXEC) $(OBJ)
