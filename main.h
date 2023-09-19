@@ -7,6 +7,6 @@ char* initCarState(int cols);
 int* initPlayer();
 int* updatePlayer(int rows, int cols, int* player, char** map);
 int* updateCars(int rows, int cols, int* cars, char* carState, char** map);
-char** updateMap(int rows, int cols, int* player, int* cars, char* carState, char** map);
+int updateMap(int rows, int cols, int* player, int* cars, char* carState, char** map, int counter);
 
 #endif

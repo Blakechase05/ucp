@@ -135,18 +135,30 @@ int* updatePlayer(int rows, int cols, int* player, char** map) {
 int* updateCars(int rows, int cols, int* cars, char* carState, char** map) {
   int i = 0;
   
-  if(carState[2] == '<') {
-    map[2][cars[2]] = '.';
-    cars[2] = cars[2] - 1;
-  } else if (carState[2] == '>') {
-    map[2][cars[2]] = '.';
-    cars[2] = cars[2] + 1;
+  for (int i = 0; i < cols; i++) {
+    if(carState[i] == '<') {
+      if(cars[i] == 1) {
+        carState[i] = '>';
+      }
+      if(cars[i] != 1) {
+        map[i][cars[i]] = '.';
+        cars[i] = cars[i] - 1;
+      }
+    } else if (carState[i] == '>') {
+      if(cars[i] == rows - 2) {
+        carState[i] = '<';
+      }
+      if(cars[i] != rows - 2) {
+        map[i][cars[i]] = '.';
+        cars[i] = cars[i] + 1;
+      }
+    }
   }
 
   return cars;
 }
 
-char** updateMap(int rows, int cols, int* player, int* cars, char* carState, char** map) {
+int updateMap(int rows, int cols, int* player, int* cars, char* carState, char** map, int counter) {
   int i, j = 0;
 
   if(player[0] % 2 == 0) {
@@ -162,6 +174,8 @@ char** updateMap(int rows, int cols, int* player, int* cars, char* carState, cha
   for(i = 0; i < cols - 2; i++) {
     map[i][cars[i]] = carState[i];
   }
+
+  system("clear");
 
   for (i = 0; i < cols; i++) {
     for (j = 0; j < rows; j++) {
@@ -182,12 +196,20 @@ char** updateMap(int rows, int cols, int* player, int* cars, char* carState, cha
 
   map[player[0]][player[1]] = 'P';
 
-  return map;
+  for (i = 0; i < cols; i++) {
+    for (j = 0; j < rows; j++) {
+      printf("%c", map[i][j]);
+    }
+    printf("\n");
+  }
+
+  return counter;
 }
 
 int main(int argc, char* argv[]) {
   int i = 0, j = 0;
- 
+  int counter = 0;
+
    /* Input rows and coloums from the ./ command */
   int rows = atoi(argv[2]) + 2;
   int cols = atoi(argv[1]) + 2;
@@ -209,27 +231,20 @@ int main(int argc, char* argv[]) {
   }
 
   while(TRUE) {
-    updateMap(rows, cols, player, cars, carState, map);
+    updateMap(rows, cols, player, cars, carState, map, counter);
 
     if (player[1] == rows - 2) {
       if (player[0] == cols - 2) {
-        printf("Winny winny chicky dinner");
+        printf("Winny winny chicky dinner\n");
         return 0;
       }
     }
 
     if(player[0] % 2 == 0) {
       if(player[1] == cars[player[0]]) {
-        printf("You lose!");
+        printf("You lose!\n");
         return 0;
       }
-    }
-
-    for (i = 0; i < cols; i++) {
-      for (j = 0; j < rows; j++) {
-        printf("%c", map[i][j]);
-      }
-      printf("\n");
     }
   }
 
