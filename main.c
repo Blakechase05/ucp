@@ -137,23 +137,20 @@ int* updateCars(int rows, int cols, int* cars, char* carState, char** map) {
   
   for (int i = 0; i < cols; i++) {
     if(carState[i] == '<') {
-      if(cars[i] == 1) {
+      if(cars[i] == 2) {
         carState[i] = '>';
-        cars[i] = cars[i] + 1;
       }
-      if(cars[i] != 1) {
-        map[i][cars[i]] = '.';
-        cars[i] = cars[i] - 1;
-      }
+      
+      map[i][cars[i]] = '.';
+      cars[i] = cars[i] - 1;
+    
     } else if (carState[i] == '>') {
-      if(cars[i] == rows - 2) {
+      if(cars[i] == rows - 3) {
         carState[i] = '<';
-        cars[i] = cars[i] - 1;
       }
-      if(cars[i] != rows - 2) {
-        map[i][cars[i]] = '.';
-        cars[i] = cars[i] + 1;
-      }
+      
+      map[i][cars[i]] = '.';
+      cars[i] = cars[i] + 1;
     }
   }
 
