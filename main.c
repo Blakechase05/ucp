@@ -76,8 +76,8 @@ int main(int argc, char* argv[]) {
   for(i = 0; i < rows; i++) {
     for (j = 0; j < cols; j++) {
       if(intMap[i][j] == 3) {
-        player.x = i;
-        player.y = j;
+        player.x = j;
+        player.y = i;
       }
     }
   }
@@ -88,8 +88,8 @@ int main(int argc, char* argv[]) {
   for(i = 0; i < rows; i++) {
     for (j = 0; j < cols; j++) {
       if(intMap[i][j] == 4) {
-        goal.x = i;
-        goal.y = j;
+        goal.x = j;
+        goal.y = i;
       }
     }
   }
@@ -103,8 +103,8 @@ int main(int argc, char* argv[]) {
   for(i = 0; i < rows; i++) {
     for (j = 0; j < cols; j++) {
       if(intMap[i][j] == 2) {
-        car.x = i;
-        car.y = j;
+        car.x = j;
+        car.y = i;
       }
     }
   }
@@ -138,8 +138,8 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  map[player.x][player.y] = 'P';
-  map[car.x][car.y] = car.state;
+  map[player.y][player.x] = 'P';
+  map[car.y][car.x] = car.state;
   
   /* Print map with new updates */
   for (i = 0; i < rows; i++) {
@@ -155,31 +155,87 @@ int main(int argc, char* argv[]) {
   while(TRUE) {
     scanf(" %c", &input);
 
+    /* 
+        PLAYER MOVEMENT 
+    */
     /* Vertical Movement */
     if(input == 'w') {
-      if(player.x != 1) {
-        player.x -= 1;
+      if(player.y != 1) {
+        player.y -= 1;
       }
     } else if(input == 's') {
-      if(player.x != rows - 2) {
-        player.x += 1;
+      if(player.y != rows - 2) {
+        player.y += 1;
       }
     }
 
     /* Horizontal Movement */
     if(input == 'a') {
-      if(player.y != 1) {
-        player.y -= 1;
+      if(player.x != 1) {
+        player.x -= 1;
       }
     } else if(input == 'd') {
-      if(player.y != cols - 2) {
-        player.y += 1;
+      if(player.x != cols - 2) {
+        player.x += 1;
+      }
+    }
+
+    /*
+        CAR MOVEMENT
+    */
+    if(car.state == '>') {
+      if(map[car.y][car.x + 1] == '.') {
+        car.x += 1;
+      } else {
+        if (map[car.y - 1][car.x] == '.') {
+          car.state = '^';
+          car.y -= 1;
+        } else if (map[car.y + 1][car.x] == '.') {
+          car.state = 'v';
+          car.y += 1;
+        }
+      }
+    } else if(car.state == '<') {
+      if(map[car.y][car.x - 1] == '.') {
+        car.x -= 1;
+      } else {
+        if (map[car.y - 1][car.x] == '.') {
+          car.state = '^';
+          car.y -= 1;
+        } else if (map[car.y + 1][car.x] == '.') {
+          car.state = 'v';
+          car.y += 1;
+        }
+      }
+    } else if(car.state == '^') {
+      if(map[car.y - 1][car.x] == '.') {
+        car.y -= 1;
+      } else {
+        if (map[car.y][car.x - 1] == '.') {
+          car.state = '<';
+          car.x -= 1;
+        } else if (map[car.y][car.x + 1] == '.') {
+          car.state = '>';
+          car.x += 1;
+        }
+      }
+    } else if(car.state == 'v') {
+      if(map[car.y + 1][car.x] == '.') {
+        car.y += 1;
+      } else {
+        if (map[car.y][car.x - 1] == '.') {
+          car.state = '<';
+          car.x -= 1;
+        } else if (map[car.y][car.x + 1] == '.') {
+          car.state = '>';
+          car.x += 1;
+        }
       }
     }
 
     /* Update map background */
     for(i = 0; i < rows; i++) {
-      for (j = 0; j < cols; j++) {
+      for(j = 0; j < cols; j++) {
         if(intMap[i][j] == 0) {
           map[i][j] = ' ';
         } else if (intMap[i][j] == 1) {
@@ -197,10 +253,10 @@ int main(int argc, char* argv[]) {
     }
     
     /* Update the player's position in the map */
-    map[player.x][player.y] = 'P';
+    map[player.y][player.x] = 'P';
 
     /* Update the car's position in the map */
-    map[car.x][car.y] = car.state;
+    map[car.y][car.x] = car.state;
 
     /*system("cls");*/
 
