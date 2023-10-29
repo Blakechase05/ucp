@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include "map.h"
+#include "linkedlist.h"
 
 #define FALSE 0
 #define TRUE !FALSE
@@ -10,6 +11,12 @@ int main(int argc, char* argv[]) {
   int i, j, rows, cols;
 
   char input;
+
+  Node* playerXHead = NULL;
+  Node* playerYHead = NULL;
+
+  Node* carXHead = NULL;
+  Node* carYHead = NULL;
 
   Car* car;
   Player* player;
@@ -40,8 +47,14 @@ int main(int argc, char* argv[]) {
   }
 
   player = initPlayer(rows, cols, intMap);
+  insertStart(&playerXHead, player->x);
+  insertStart(&playerYHead, player->y);
+
   goal = initGoal(rows, cols, intMap);
+  
   car = initCar(rows, cols, intMap);
+  insertStart(&carXHead, car->x);
+  insertStart(&carYHead, car->y);
 
   map = initMap(rows, cols, player, car, intMap);
 
@@ -52,6 +65,9 @@ int main(int argc, char* argv[]) {
     enableBuffer();
 
     updatePlayer(rows, cols, input, player);
+    insertStart(&playerXHead, player->x);
+    insertStart(&playerYHead, player->y);
+
     updateCar(map, car);
     updateMap(rows, cols, player, car, intMap, map);
 
@@ -59,6 +75,8 @@ int main(int argc, char* argv[]) {
     if(player->x == goal->x) {
       if(player->y == goal->y) {
         printf("Winner Winner Chicken Dinner!\n");
+        displayList(playerXHead);
+        displayList(playerYHead);
         return 1;
       }
     }
@@ -67,6 +85,8 @@ int main(int argc, char* argv[]) {
     if(player->x == car->x) {
       if(player->y == car->y) {
         printf("You Lose!\n");
+        displayList(playerXHead);
+        displayList(playerYHead);
         return 1;
       }
     }
@@ -82,6 +102,9 @@ int main(int argc, char* argv[]) {
     free(map[i]);
   }
   free(map);
+
+  freeList(playerXHead);
+  freeList(playerYHead);
 
   return 0;
 }

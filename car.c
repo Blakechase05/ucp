@@ -72,6 +72,8 @@ Car* updateCar(char** map, Car* car) {
       }
     }
   }
+
+  
   
   return car;
 }

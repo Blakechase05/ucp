@@ -3,7 +3,6 @@
 
 #include "map.h"
 
-
 int** initIntMap(FILE* fp, int rows, int cols) {
   int i, j;
   
