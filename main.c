@@ -2,38 +2,30 @@
 #include <stdlib.h>
 
 #include "terminal.h"
+#include "player.h"
+#include "goal.h"
+#include "car.h"
+#include "map.h"
 
 #define FALSE 0
 #define TRUE !FALSE
-
-struct Obj {
-  int x;
-  int y;
-};
-
-struct Car {
-  int x;
-  int y;
-  char state;
-};
 
 int main(int argc, char* argv[]) {
   int i, j, rows, cols;
 
   char input;
 
-  struct Car car;
-  struct Obj player;
-  struct Obj goal;
+  Car car;
+  Player player;
+  Goal goal;
+
+  char* file = argv[1];
 
   int** intMap;
   char** map;
 
-  /* 
-      OPENING AND READING THE FILE CONTENTS
-  */
   /* File pointer to <fileName>.txt */
-  FILE* fp = fopen(argv[1], "r");
+  FILE* fp = fopen(file, "r");
 
   /* Check there's an input for fp */
   if(fp != NULL) {
@@ -47,68 +39,16 @@ int main(int argc, char* argv[]) {
     rows += 2;
     cols += 2;
 
-    /* Malloc the 2D array to store our integers from the file */
-    intMap = (int**)malloc(rows * sizeof(int*));
-    for (i = 0; i < rows; i++) {
-      intMap[i] = (int*)malloc(cols * sizeof(int));
-    }
-
-    for (i = 0; i < rows; i++) {
-      for (j = 0; j < cols; j++) {
-        intMap[i][j] = 5;
-      }
-    }
-
-    for (i = 1; i < rows - 1; i++) {
-      for (j = 1; j < cols - 1; j++) {
-        fscanf(fp, "%d", &intMap[i][j]);
-      }
-    }
-
-    fclose(fp);
+    initIntMap(fp, rows, cols, intMap);
 
   } else {
     perror("Cannot open file");
   }
 
-  /*
-      PLAYER STUFF
-  */
-  for(i = 0; i < rows; i++) {
-    for (j = 0; j < cols; j++) {
-      if(intMap[i][j] == 3) {
-        player.x = j;
-        player.y = i;
-      }
-    }
-  }
 
-  /*
-      GOAL STUFF
-  */
-  for(i = 0; i < rows; i++) {
-    for (j = 0; j < cols; j++) {
-      if(intMap[i][j] == 4) {
-        goal.x = j;
-        goal.y = i;
-      }
-    }
-  }
-
-  /*
-      CAR STUFF
-  */
-  /* Set the car's initial direction/state */
-  car.state = '>';
-
-  for(i = 0; i < rows; i++) {
-    for (j = 0; j < cols; j++) {
-      if(intMap[i][j] == 2) {
-        car.x = j;
-        car.y = i;
-      }
-    }
-  }
+  initPlayer(rows, cols, intMap, &player);
+  initGoal(rows, cols, intMap, &goal);
+  initCar(rows, cols, intMap, &car);
 
   /* 
       CHAR ARRAY 
@@ -118,7 +58,7 @@ int main(int argc, char* argv[]) {
     map[i] = (char*)malloc(rows * sizeof(char));
   }
 
-  /* Update map background */
+  /* Init map background */
   for(i = 0; i < rows; i++) {
     for (j = 0; j < cols; j++) {
       if(intMap[i][j] == 0) {
