@@ -82,6 +82,6 @@ int main(int argc, char* argv[]) {
     free(map[i]);
   }
   free(map);
-  
+
   return 0;
 }

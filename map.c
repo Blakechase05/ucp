@@ -70,6 +70,11 @@ char** initMap(int rows, int cols, Player* player, Car* car,  int** intMap) {
     printf("\n");
   }
 
+  printf("Press w to move up\n");
+  printf("Press a to move left\n");
+  printf("Press s to move down\n");
+  printf("Press d to move right\n");
+
   return map;
 }
 
@@ -110,6 +115,11 @@ char** updateMap(int rows, int cols, Player* player, Car* car, int** intMap, cha
     }
     printf("\n");
   }
+
+  printf("Press w to move up\n");
+  printf("Press a to move left\n");
+  printf("Press s to move down\n");
+  printf("Press d to move right\n");
 
   return map;
 }
