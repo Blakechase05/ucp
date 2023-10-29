@@ -7,5 +7,6 @@ typedef struct player {
 } Player;
 
 Player* initPlayer(int rows, int cols, int** intMap);
+Player* updatePlayer(int rows, int cols, char input, Player* player);
 
 #endif

@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "terminal.h"
-#include "player.h"
-#include "goal.h"
-#include "car.h"
 #include "map.h"
 
 #define FALSE 0
@@ -47,133 +43,19 @@ int main(int argc, char* argv[]) {
   goal = initGoal(rows, cols, intMap);
   car = initCar(rows, cols, intMap);
 
-  map = initMap(rows, cols, intMap);
+  map = initMap(rows, cols, player, car, intMap);
 
-  /*
-      WHILE LOOP
-  */
   while(TRUE) {
-    /*disable and enable buffer stops user from having to press enter */
+    /* Disable and enable buffer stops user from having to press enter */
     disableBuffer();
     scanf(" %c", &input);
     enableBuffer();
 
-    /* 
-        PLAYER MOVEMENT 
-    */
-    /* Vertical Movement */
-    if(input == 'w') {
-      if(player->y != 1) {
-        player->y -= 1;
-      }
-    } else if(input == 's') {
-      if(player->y != rows - 2) {
-        player->y += 1;
-      }
-    }
+    updatePlayer(rows, cols, input, player);
+    updateCar(map, car);
+    updateMap(rows, cols, player, car, intMap, map);
 
-    /* Horizontal Movement */
-    if(input == 'a') {
-      if(player->x != 1) {
-        player->x -= 1;
-      }
-    } else if(input == 'd') {
-      if(player->x != cols - 2) {
-        player->x += 1;
-      }
-    }
-
-    /*
-        CAR MOVEMENT
-    */
-    if(car->state == '>') {
-      if(map[car->y][car->x + 1] == '.') {
-        car->x += 1;
-      } else {
-        if (map[car->y - 1][car->x] == '.') {
-          car->state = '^';
-          car->y -= 1;
-        } else if (map[car->y + 1][car->x] == '.') {
-          car->state = 'v';
-          car->y += 1;
-        }
-      }
-    } else if(car->state == '<') {
-      if(map[car->y][car->x - 1] == '.') {
-        car->x -= 1;
-      } else {
-        if (map[car->y - 1][car->x] == '.') {
-          car->state = '^';
-          car->y -= 1;
-        } else if (map[car->y + 1][car->x] == '.') {
-          car->state = 'v';
-          car->y += 1;
-        }
-      }
-    } else if(car->state == '^') {
-      if(map[car->y - 1][car->x] == '.') {
-        car->y -= 1;
-      } else {
-        if (map[car->y][car->x - 1] == '.') {
-          car->state = '<';
-          car->x -= 1;
-        } else if (map[car->y][car->x + 1] == '.') {
-          car->state = '>';
-          car->x += 1;
-        }
-      }
-    } else if(car->state == 'v') {
-      if(map[car->y + 1][car->x] == '.') {
-        car->y += 1;
-      } else {
-        if (map[car->y][car->x - 1] == '.') {
-          car->state = '<';
-          car->x -= 1;
-        } else if (map[car->y][car->x + 1] == '.') {
-          car->state = '>';
-          car->x += 1;
-        }
-      }
-    }
-
-    /* Update map background */
-    for(i = 0; i < rows; i++) {
-      for(j = 0; j < cols; j++) {
-        if(intMap[i][j] == 0) {
-          map[i][j] = ' ';
-        } else if (intMap[i][j] == 1) {
-          map[i][j] = '.';
-        } else if (intMap[i][j] == 2) {
-          map[i][j] = '.';
-        } else if (intMap[i][j] == 3) {
-          map[i][j] = ' ';
-        } else if (intMap[i][j] == 4) {
-          map[i][j] = 'G';
-        } else if (intMap[i][j] == 5) {
-          map[i][j] = '*';
-        }
-      }
-    }
-    
-    /* Update the player's position in the map */
-    map[player->y][player->x] = 'P';
-
-    /* Update the car's position in the map */
-    map[car->y][car->x] = car->state;
-
-    system("clear");
-
-    /* Print map with new updates */
-    for (i = 0; i < rows; i++) {
-      for (j = 0; j < cols; j++) {
-        printf("%c ", map[i][j]);
-      }
-      printf("\n");
-    }
-
-    /*
-        WIN CONDITION
-    */
+    /* WIN CONDITION */
     if(player->x == goal->x) {
       if(player->y == goal->y) {
         printf("Winner Winner Chicken Dinner!\n");
@@ -181,9 +63,7 @@ int main(int argc, char* argv[]) {
       }
     }
 
-    /*
-        LOSE CONDITION
-    */
+    /* LOSE CONDITION */
     if(player->x == car->x) {
       if(player->y == car->y) {
         printf("You Lose!\n");
@@ -192,9 +72,7 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  /*
-      FREEING MEMORY
-  */
+  /* FREEING MEMORY */
   for(i = 0; i < rows; i++) {
     free(intMap[i]);
   }

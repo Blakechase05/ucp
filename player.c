@@ -19,3 +19,29 @@ Player* initPlayer(int rows, int cols, int** intMap) {
 
   return player;
 }
+
+Player* updatePlayer(int rows, int cols, char input, Player* player) {
+  /* Vertical Movement */
+  if(input == 'w') {
+    if(player->y != 1) {
+      player->y -= 1;
+    }
+  } else if(input == 's') {
+    if(player->y != rows - 2) {
+      player->y += 1;
+    }
+  }
+
+  /* Horizontal Movement */
+  if(input == 'a') {
+    if(player->x != 1) {
+      player->x -= 1;
+    }
+  } else if(input == 'd') {
+    if(player->x != cols - 2) {
+      player->x += 1;
+    }
+  }
+
+  return player;
+}

@@ -21,3 +21,57 @@ Car* initCar(int rows, int cols, int** intMap) {
 
   return car;
 }
+
+Car* updateCar(char** map, Car* car) {
+  if(car->state == '>') {
+    if(map[car->y][car->x + 1] == '.') {
+      car->x += 1;
+    } else {
+      if (map[car->y - 1][car->x] == '.') {
+        car->state = '^';
+        car->y -= 1;
+      } else if (map[car->y + 1][car->x] == '.') {
+        car->state = 'v';
+        car->y += 1;
+      }
+    }
+  } else if(car->state == '<') {
+    if(map[car->y][car->x - 1] == '.') {
+      car->x -= 1;
+    } else {
+      if (map[car->y - 1][car->x] == '.') {
+        car->state = '^';
+        car->y -= 1;
+      } else if (map[car->y + 1][car->x] == '.') {
+        car->state = 'v';
+        car->y += 1;
+      }
+    }
+  } else if(car->state == '^') {
+    if(map[car->y - 1][car->x] == '.') {
+      car->y -= 1;
+    } else {
+      if (map[car->y][car->x - 1] == '.') {
+        car->state = '<';
+        car->x -= 1;
+      } else if (map[car->y][car->x + 1] == '.') {
+        car->state = '>';
+        car->x += 1;
+      }
+    }
+  } else if(car->state == 'v') {
+    if(map[car->y + 1][car->x] == '.') {
+      car->y += 1;
+    } else {
+      if (map[car->y][car->x - 1] == '.') {
+        car->state = '<';
+        car->x -= 1;
+      } else if (map[car->y][car->x + 1] == '.') {
+        car->state = '>';
+        car->x += 1;
+      }
+    }
+  }
+  
+  return car;
+}

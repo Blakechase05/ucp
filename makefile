@@ -6,10 +6,10 @@ EXEC = main
 $(EXEC): $(OBJ)
 	$(CC) $(OBJ) -o $(EXEC)
 
-main.o: main.c map.h player.h goal.h car.h terminal.h
+main.o: main.c map.h
 	$(CC) $(FLAGS) main.c -c
 
-map.o: map.c map.h terminal.h
+map.o: map.c map.h player.h goal.h car.h terminal.h
 	$(CC) $(CFLAGS) map.c -c
 
 player.o: player.c player.h

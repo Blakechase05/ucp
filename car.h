@@ -8,5 +8,6 @@
   } Car;
 
   Car* initCar(int rows, int cols, int** intMap);
+  Car* updateCar(char** map, Car* car);
 
 #endif

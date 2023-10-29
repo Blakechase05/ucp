@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 #include "map.h"
-#include "terminal.h"
+
 
 int** initIntMap(FILE* fp, int rows, int cols) {
   int i, j;
@@ -63,6 +63,47 @@ char** initMap(int rows, int cols, Player* player, Car* car,  int** intMap) {
   
   /* Print map with new updates */
   system("clear");
+  for (i = 0; i < rows; i++) {
+    for (j = 0; j < cols; j++) {
+      printf("%c ", map[i][j]);
+    }
+    printf("\n");
+  }
+
+  return map;
+}
+
+char** updateMap(int rows, int cols, Player* player, Car* car, int** intMap, char** map) {
+  int i, j;
+  
+  /* Update map background */
+  for(i = 0; i < rows; i++) {
+    for(j = 0; j < cols; j++) {
+      if(intMap[i][j] == 0) {
+        map[i][j] = ' ';
+      } else if (intMap[i][j] == 1) {
+        map[i][j] = '.';
+      } else if (intMap[i][j] == 2) {
+        map[i][j] = '.';
+      } else if (intMap[i][j] == 3) {
+        map[i][j] = ' ';
+      } else if (intMap[i][j] == 4) {
+        map[i][j] = 'G';
+      } else if (intMap[i][j] == 5) {
+        map[i][j] = '*';
+      }
+    }
+  }
+  
+  /* Update the player's position in the map */
+  map[player->y][player->x] = 'P';
+
+  /* Update the car's position in the map */
+  map[car->y][car->x] = car->state;
+
+  system("clear");
+
+  /* Print map with new updates */
   for (i = 0; i < rows; i++) {
     for (j = 0; j < cols; j++) {
       printf("%c ", map[i][j]);
