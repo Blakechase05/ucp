@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
   insertStart(&playerYHead, player->y);
 
   goal = initGoal(rows, cols, intMap);
-  
+
   car = initCar(rows, cols, intMap);
   insertStart(&carXHead, car->x);
   insertStart(&carYHead, car->y);
@@ -64,19 +64,36 @@ int main(int argc, char* argv[]) {
     scanf(" %c", &input);
     enableBuffer();
 
-    updatePlayer(rows, cols, input, player);
-    insertStart(&playerXHead, player->x);
-    insertStart(&playerYHead, player->y);
+    if(playerXHead != NULL || playerYHead != NULL || carXHead != NULL || carYHead != NULL) {
+      if(input == 'u') {
+        removeStart(&playerXHead);
+        removeStart(&playerYHead);
+        removeStart(&carXHead);
+        removeStart(&carYHead);
 
-    updateCar(map, car);
+        player->x = playerXHead->data;
+        player->y = playerYHead->data;
+        
+        car->x = carXHead->data;
+        car->y = carYHead->data;
+      } else {
+        updatePlayer(rows, cols, input, player);
+        insertStart(&playerXHead, player->x);
+        insertStart(&playerYHead, player->y);
+
+        updateCar(map, car);
+        insertStart(&carXHead, car->x);
+        insertStart(&carYHead, car->y);
+      }
+    }
+
+
     updateMap(rows, cols, player, car, intMap, map);
 
     /* WIN CONDITION */
     if(player->x == goal->x) {
       if(player->y == goal->y) {
         printf("Winner Winner Chicken Dinner!\n");
-        displayList(playerXHead);
-        displayList(playerYHead);
         return 1;
       }
     }
@@ -85,8 +102,6 @@ int main(int argc, char* argv[]) {
     if(player->x == car->x) {
       if(player->y == car->y) {
         printf("You Lose!\n");
-        displayList(playerXHead);
-        displayList(playerYHead);
         return 1;
       }
     }
