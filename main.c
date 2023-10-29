@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "terminal.h"
+
 #define FALSE 0
 #define TRUE !FALSE
 
@@ -30,7 +32,6 @@ int main(int argc, char* argv[]) {
   /* 
       OPENING AND READING THE FILE CONTENTS
   */
-
   /* File pointer to <fileName>.txt */
   FILE* fp = fopen(argv[1], "r");
 
@@ -109,8 +110,6 @@ int main(int argc, char* argv[]) {
     }
   }
 
-  printf("%d %d\n", car.x, car.y);
-
   /* 
       CHAR ARRAY 
   */
@@ -153,7 +152,10 @@ int main(int argc, char* argv[]) {
       WHILE LOOP
   */
   while(TRUE) {
+    /*disable and enable buffer stops user from having to press enter */
+    disableBuffer();
     scanf(" %c", &input);
+    enableBuffer();
 
     /* 
         PLAYER MOVEMENT 
@@ -258,7 +260,7 @@ int main(int argc, char* argv[]) {
     /* Update the car's position in the map */
     map[car.y][car.x] = car.state;
 
-    /*system("cls");*/
+    system("clear");
 
     /* Print map with new updates */
     for (i = 0; i < rows; i++) {
@@ -292,7 +294,6 @@ int main(int argc, char* argv[]) {
   /*
       FREEING MEMORY
   */
-
   for(i = 0; i < rows; i++) {
     free(intMap[i]);
   }
