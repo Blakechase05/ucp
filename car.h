@@ -7,6 +7,6 @@
     char state;
   } Car;
 
-  Car* initCar(int rows, int cols, int** intMap, Car* car);
+  Car* initCar(int rows, int cols, int** intMap);
 
 #endif

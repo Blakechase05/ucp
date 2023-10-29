@@ -6,6 +6,6 @@ typedef struct goal {
   int y;
 } Goal;
 
-Goal* initGoal(int rows, int cols, int** intMap, Goal* goal);
+Goal* initGoal(int rows, int cols, int** intMap);
 
 #endif

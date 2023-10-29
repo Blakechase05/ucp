@@ -2,12 +2,13 @@
 #include <stdlib.h>
 
 #include "map.h"
+#include "terminal.h"
 
-int** initIntMap(FILE* fp, int rows, int cols, int** intMap) {
+int** initIntMap(FILE* fp, int rows, int cols) {
   int i, j;
   
   /* Malloc the 2D array to store our integers from the file */
-  intMap = (int**)malloc(rows * sizeof(int*));
+  int** intMap = (int**)malloc(rows * sizeof(int*));
   for (i = 0; i < rows; i++) {
     intMap[i] = (int*)malloc(cols * sizeof(int));
   }
@@ -27,4 +28,47 @@ int** initIntMap(FILE* fp, int rows, int cols, int** intMap) {
   fclose(fp);
 
   return intMap;
+}
+
+char** initMap(int rows, int cols, Player* player, Car* car,  int** intMap) {
+  int i, j;
+  
+  char** map = (char**)malloc(cols * sizeof(char*));
+  
+  for (i = 0; i < cols; i++) {
+    map[i] = (char*)malloc(rows * sizeof(char));
+  }
+
+  /* Init map background */
+  for(i = 0; i < rows; i++) {
+    for (j = 0; j < cols; j++) {
+      if(intMap[i][j] == 0) {
+        map[i][j] = ' ';
+      } else if (intMap[i][j] == 1) {
+        map[i][j] = '.';
+      } else if (intMap[i][j] == 2) {
+        map[i][j] = '.';
+      } else if (intMap[i][j] == 3) {
+        map[i][j] = ' ';
+      } else if (intMap[i][j] == 4) {
+        map[i][j] = 'G';
+      } else if (intMap[i][j] == 5) {
+        map[i][j] = '*';
+      }
+    }
+  }
+
+  map[player->y][player->x] = 'P';
+  map[car->y][car->x] = car->state;
+  
+  /* Print map with new updates */
+  system("clear");
+  for (i = 0; i < rows; i++) {
+    for (j = 0; j < cols; j++) {
+      printf("%c ", map[i][j]);
+    }
+    printf("\n");
+  }
+
+  return map;
 }

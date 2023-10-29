@@ -3,8 +3,10 @@
 
 #include "car.h"
 
-Car* initCar(int rows, int cols, int** intMap, Car* car) {
+Car* initCar(int rows, int cols, int** intMap) {
   int i, j;
+
+  Car* car = malloc(sizeof(Car));
   
   car->state = '>';
 

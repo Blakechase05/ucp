@@ -3,8 +3,10 @@
 
 #include "goal.h"
 
-Goal* initGoal(int rows, int cols, int** intMap, Goal* goal) {
+Goal* initGoal(int rows, int cols, int** intMap) {
   int i, j;
+
+  Goal* goal = malloc(sizeof(Goal));
   
   for(i = 0; i < rows; i++) {
     for (j = 0; j < cols; j++) {

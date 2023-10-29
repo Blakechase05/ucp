@@ -3,8 +3,10 @@
 
 #include "player.h"
 
-Player* initPlayer(int rows, int cols, int** intMap, Player* player) {
+Player* initPlayer(int rows, int cols, int** intMap) {
   int i, j;
+
+  Player* player = malloc(sizeof(Player));
   
   for(i = 0; i < rows; i++) {
     for (j = 0; j < cols; j++) {

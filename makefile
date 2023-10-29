@@ -9,7 +9,7 @@ $(EXEC): $(OBJ)
 main.o: main.c map.h player.h goal.h car.h terminal.h
 	$(CC) $(FLAGS) main.c -c
 
-map.o: map.c map.h
+map.o: map.c map.h terminal.h
 	$(CC) $(CFLAGS) map.c -c
 
 player.o: player.c player.h

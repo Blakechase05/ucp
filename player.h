@@ -6,6 +6,6 @@ typedef struct player {
   int y;
 } Player;
 
-Player* initPlayer(int rows, int cols, int** intMap, Player* player);
+Player* initPlayer(int rows, int cols, int** intMap);
 
 #endif
